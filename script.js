@@ -11,9 +11,9 @@ const wynik = document.querySelector('.wynik')
 wynik.textContent = i1.value
 
 const przeliczBtn = document.querySelector('#btn')
+const div = document.querySelector('.rev')
 
-
-document.addEventListener('change', ()=>{
+div.addEventListener('change', ()=>{
 
     
     const min = Math.min(i1.value,i2.value,i3.value,i4.value)
@@ -35,7 +35,6 @@ document.addEventListener('change', ()=>{
     p3.textContent="avg: " +avg
     p4.textContent="sum: " +sum
 
-    document.removeChild(wynik)
     wynik.appendChild(p1)
     wynik.appendChild(p2)
     wynik.appendChild(p3)
