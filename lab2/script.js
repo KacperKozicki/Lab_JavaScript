@@ -1,32 +1,48 @@
-// const img1 = new Image()
-// const img2 = new Image()
-// const img3 = new Image()
-// const img4 = new Image()
-// const img5 = new Image()
+let aktualny = 0;
+const slajdy = document.querySelectorAll('.slajd');
+const kropki = document.querySelectorAll('.kropka');
+const next = document.querySelector('.next');
+const prev = document.querySelector('.prev');
 
-// img1.src="https://source.unsplash.com/3tYZjGSBwbk";
-// img1.classList.add('imag');
-const slider = document.querySelector('.slider');
-// setTimeout(
-//     ()=>{
-//         console.log('asdaf')
-//         const box = document.querySelector('#slider-inner')
-//         box.style.transform='translateX(100px)'
-//     }, 2_000)
+const lenSlaid = slajdy.length;
 
-let positionX = 0
-const animat = setInterval(
-    ()=>{
-        const box = document.querySelectorAll('.slider-box')
-        box.forEach(element => {
-            element.style.transform=`translateX(${positionX}px)`
-        positionX++
-        });
-        
+function aktualizujSlajd(indeks) {
+    
+  aktualny = (indeks + lenSlaid) % lenSlaid;
+  const x = -aktualny * 100;
+  document.querySelector('.box').style.transform = `translateX(${x}%)`;
+  zaktualizujKropki();
+  
+}
 
-        
-    }, 8)
+function zaktualizujKropki() {
+  kropki.forEach((kropka, indeks) => {
+    if (indeks === aktualny) {
+      kropka.classList.add('aktywna');
+    } else {
+      kropka.classList.remove('aktywna');
+    }
+  });
+}
 
-setTimeout(()=>{
-    clearInterval(animat)
-},3_000)
+  
+next.addEventListener('click', () => {
+    aktualizujSlajd(aktualny+1);
+  });
+
+  prev.addEventListener('click', () => {
+    aktualizujSlajd(aktualny-1);
+  });
+  
+  kropki.forEach((kropka, indeks) => {
+    kropka.addEventListener('click', () => {
+      aktualizujSlajd(indeks);
+    });
+  });
+
+setInterval(() => {
+  //aktualny = (aktualny + 1) % lenSlaid;
+  aktualizujSlajd(aktualny+1);
+}, 3000);
+
+zaktualizujKropki();
