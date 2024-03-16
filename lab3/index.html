@@ -8,20 +8,47 @@
 </head>
 <body>
 
-    <button id="start">Nagrywaj</button>
-    <button id="stop">Stop</button>
-    <div id="time"></div>
+    <div class="keys">
+        <div class="flex1">
+            <div class="key"><h1>A</h1><p>boom</p></div>
+            <div class="key"><h1>S</h1><p>clap</p></div>
+            <div class="key"><h1>D</h1><p>hihat</p></div>
+            <div class="key"><h1>F</h1><p>kick</p></div>
+            <div class="key"><h1>G</h1><p>openhat</p></div>
+        </div>
+        <div class="flex1">
+            <div class="key"><h1>Z</h1><p>ride</p></div>
+            <div class="key"><h1>X</h1><p>snare</p></div>
+            <div class="key"><h1>C</h1><p>tink</p></div>
+            <div class="key"><h1>V</h1><p>tom</p></div>
+        </div>
+    </div>
+    <div class="controls">
+       <div class="buttons">
+        <button id="start">Nagrywaj</button>
+        <button id="stop">Stop</button>
+        <button id="addTrack">Dodaj Kanał</button>
+       </div> 
+        <div id="time"></div>
+    
+    
+        <div class="tracks" id="tracks">
+            <!-- <input type="checkbox" id="track1" class="chip" role="switch" value="Track1" aria-label="Track1" />
+            <input type="checkbox" id="track1" class="chip" role="switch" value="Track1" aria-label="Track1" />
 
-    <button id="play">Play</button>
+            <input type="checkbox" id="track2" class="chip" role="switch" value="Track2" aria-label="Track2" />
+            <input type="checkbox" id="track3" class="chip" role="switch" value="Track3" aria-label="Track3" />
+            <input type="checkbox" id="track4" class="chip" role="switch" value="Track4" aria-label="Track4" /> -->
+        </div>
+        
+        
+        <div class="flex2">
+            <button id="play">Play</button>
+            <input type="checkbox" id="tykacz" class="tyk" role="switch"  aria-label="tykacz" />
 
-    <div class="tracks">
-        <input type="checkbox" id="track1">
-        <input type="checkbox" id="track2">
-        <input type="checkbox" id="track3">
-        <input type="checkbox" id="track4">
+        </div>
     </div>
     
-    Tykacz:<input type="checkbox" id="tykacz">
 
 
 

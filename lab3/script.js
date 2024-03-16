@@ -1,7 +1,3 @@
-// const s1=document.querySelector('#sound1');
-// const s2=document.querySelector('#sound2');
-// const s3=document.querySelector('#sound3');
-// const s4=document.querySelector('#sound4');
 
 const sounds={
     'a':document.querySelector('#sound1'),
@@ -15,16 +11,33 @@ const sounds={
     'c':document.querySelector('#sound8'),
     'v':document.querySelector('#sound9'),
 }
-//tablica tablic obiektów, dla każdej ścieżki własna tablica a wniej obiekt 
-const times = [[], [], [], []];
+const times = [];//tablica tablic obiektów, dla każdej ścieżki własna tablica a wniej obiekt 
+const addTrackButton = document.querySelector('#addTrack');
+const tracksContainer = document.querySelector('#tracks');
+
+addTrackButton.addEventListener('click', addTrack);
+
+function addTrack() {
+    const id = times.length;
+    times.push([]); 
+
+    const newCheckbox = document.createElement('input');
+    newCheckbox.type = 'checkbox';
+    newCheckbox.id = `track${id}`;
+    newCheckbox.value = `track${id+1}`;
+    newCheckbox.className = 'chip';
+    newCheckbox.role = 'switch';
+
+    tracksContainer.appendChild(newCheckbox);
+}
 
 //tablica checkboxów
-const checkbox = [
-    document.querySelector('#track1'),
-    document.querySelector('#track2'),
-    document.querySelector('#track3'),
-    document.querySelector('#track4')
-];
+// const checkbox = [
+//     document.querySelector('#track1'),
+//     document.querySelector('#track2'),
+//     document.querySelector('#track3'),
+//     document.querySelector('#track4')
+// ];
 
 
 const start = document.querySelector('#start');
@@ -54,54 +67,100 @@ const play = document.querySelector('#play');
 let startTime
 let endTime
 let isRecording=false
+let currentTrackIndex;
+let loopInterval; // Interwał dla loopowania
+let recordingStartTime;
+let maxTrackLength = 0; // Maksymalna
 const playTrack = document.querySelector('#time')
 
 //odpalamy scieżke po checkboxie
-play.addEventListener('click', () => {
-    checkbox.forEach((checkbox, index) => {
-        if (checkbox.checked) {
-            playTracks(times[index]);
-        }
-    });
-});
+// play.addEventListener('click', () => {
+//     checkbox.forEach((checkbox, index) => {
+//         if (checkbox.checked) {
+//             playTracks(times[index]);
+//         }
+//     });
+// });
 
-function playTracks(timesArray) {
-    timesArray.forEach(element => {
-        const soundToPlay = sounds[element.key];
-        if (soundToPlay) {
-            setTimeout(() => {
-                soundToPlay.currentTime = 0;
-                soundToPlay.play();
-            }, element.time);
+// function playTracks(timesArray) {
+//     timesArray.forEach(element => {
+//         const soundToPlay = sounds[element.key];
+//         if (soundToPlay) {
+//             setTimeout(() => {
+//                 soundToPlay.currentTime = 0;
+//                 soundToPlay.play();
+//             }, element.time);
+//         }
+//     });
+// }
+function playTracks(loop = false) {
+    const trackLengths = times.map(track => track.reduce((acc, curr) => Math.max(acc, curr.time), 0));
+    maxTrackLength = Math.max(...trackLengths);
+
+    times.forEach((track, index) => {
+        const checkbox = document.getElementById(`track${index}`);
+        if (checkbox.checked) {
+            track.forEach(note => {
+                setTimeout(() => {
+                    const soundToPlay = sounds[note.key];
+                    if (soundToPlay) {
+                        soundToPlay.currentTime = 0;
+                        soundToPlay.play();
+                    }
+                }, note.time);
+
+                if (loop) {
+                    setInterval(() => {
+                        soundToPlay.currentTime = 0;
+                        soundToPlay.play();
+                    }, maxTrackLength);
+                }
+            });
         }
     });
 }
+play.addEventListener('click', () => playTracks(tykacz.checked));
+
+let stoper;
 
 //nagrywaj
 start.addEventListener('click',()=>{
-    startTime = Date.now();
-    isRecording=true
-    currentTrackIndex = checkbox.findIndex(checkbox => checkbox.checked); //znajdz zaznaczone checkboxy
+    recordingStartTime = Date.now();
+    isRecording = true;
+
+    const checkboxes = tracksContainer.querySelectorAll('input[type="checkbox"]');
+    currentTrackIndex = Array.from(checkboxes).findIndex(checkbox => checkbox.checked);
+    times[currentTrackIndex] = [];
+    
 })
 
 //koniec nagrania - czas
 end.addEventListener('click',()=>{
-    endTime= Date.now();   
-    isRecording=false
-    let timeResult = endTime-startTime
-    time.textContent=timeResult
+    isRecording = false;
+    const recordingEndTime = Date.now();
+    const recordingLength = recordingEndTime - recordingStartTime;
+    playTrack.textContent = formatTime(recordingLength);
 })
 
-addEventListener('keypress',(ev)=> {
-    if(isRecording){
-        const key =ev.key
-        //times[ev.key]=Date.now()
+//formatuj czas
+function formatTime(ms) {
+    let seconds = Math.floor(ms / 1000);
+    let minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
 
+
+
+
+addEventListener('keypress',(ev)=> {
+    if (isRecording && currentTrackIndex >= 0) {
+        const key = ev.key;
         const sound = sounds[key];
         if (sound) {
             times[currentTrackIndex].push({
                 key: key,
-                time: Date.now() - startTime,
+                time: Date.now() - recordingStartTime,
             });
             sound.currentTime = 0;
             sound.play();
@@ -109,39 +168,3 @@ addEventListener('keypress',(ev)=> {
     }
 })    
 
-console.log(times)
-
-
-
-
-
-// addEventListener('keypress',(ev)=> {
-//     const key =ev.key
-
-//     const sound = sounds[key]
-//     sound.currentTime = 0
-//     sound.play()
-// })
-
-    // switch(key){
-    //     case 'a':
-    //         s1.currentTime=0
-    //         s1.play()
-    //         break;    
-    //     case 'a':
-    //         s1.currentTime=0
-    //         s1.play()
-    //         break;    
-    //     case 'a':
-    //         s1.currentTime=0
-    //         s1.play()
-    //             break;    
-    //     case 'a':
-    //         s1.currentTime=0
-    //         s1.play()
-    //         break;    
-    // }
-    // console.log(key)
-    // s1.currentTime=0
-    // s1.play()
-    
