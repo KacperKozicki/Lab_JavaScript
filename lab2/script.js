@@ -1,21 +1,19 @@
 let aktualny = 0;
+let inter;
+
 const slajdy = document.querySelectorAll('.slajd');
 const kropki = document.querySelectorAll('.kropka');
 const next = document.querySelector('.next');
 const prev = document.querySelector('.prev');
+const slider = document.querySelector('.slider');
 
-const lenSlaid = slajdy.length;
+const lenSlajd = slajdy.length;
 
-function aktualizujSlajd(indeks) {
-    
-  aktualny = (indeks + lenSlaid) % lenSlaid;
+function move(indeks) {
+  aktualny = (indeks + lenSlajd) % lenSlajd;
   const x = -aktualny * 100;
   document.querySelector('.box').style.transform = `translateX(${x}%)`;
-  zaktualizujKropki();
-  
-}
 
-function zaktualizujKropki() {
   kropki.forEach((kropka, indeks) => {
     if (indeks === aktualny) {
       kropka.classList.add('aktywna');
@@ -25,24 +23,35 @@ function zaktualizujKropki() {
   });
 }
 
-  
+function startAutoSlide() {
+  inter = setInterval(() => {
+    move(aktualny + 1);
+  }, 3000);
+}
+
+function stopAutoSlide() {
+  clearInterval(inter);
+}
+
+//start stop setinterval
+slider.addEventListener('mouseover', stopAutoSlide);
+slider.addEventListener('mouseout', startAutoSlide);
+
+
+//przyciski
 next.addEventListener('click', () => {
-    aktualizujSlajd(aktualny+1);
-  });
+  move(aktualny + 1);
+});
 
-  prev.addEventListener('click', () => {
-    aktualizujSlajd(aktualny-1);
-  });
-  
-  kropki.forEach((kropka, indeks) => {
-    kropka.addEventListener('click', () => {
-      aktualizujSlajd(indeks);
-    });
-  });
+prev.addEventListener('click', () => {
+  move(aktualny - 1);
+});
 
-setInterval(() => {
-  //aktualny = (aktualny + 1) % lenSlaid;
-  aktualizujSlajd(aktualny+1);
-}, 3000);
+//klasa dla kropek
+kropki.forEach((kropka, indeks) => {
+  kropka.addEventListener('click', () => {
+    move(indeks);
+  });
+});
 
-zaktualizujKropki();
+startAutoSlide();
