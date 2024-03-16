@@ -17,7 +17,9 @@ body{
     justify-content: center;
     align-items: center;
 }
-
+.active{
+  background-color: #583EFC!important;
+}
 .controls{
     width: auto;
     max-width: 900px;

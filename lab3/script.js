@@ -11,6 +11,21 @@ const sounds={
     'c':document.querySelector('#sound8'),
     'v':document.querySelector('#sound9'),
 }
+
+const keys = [
+    {key: 'a', selector: document.querySelector('#a')},
+    {key: 's', selector: document.querySelector('#s')},
+    {key: 'd', selector: document.querySelector('#d')},
+    {key: 'f', selector: document.querySelector('#f')},
+    {key: 'g', selector: document.querySelector('#g')},
+
+
+    {key: 'z', selector: document.querySelector('#z')},
+    {key: 'x', selector: document.querySelector('#x')},
+    {key: 'c', selector: document.querySelector('#c')},
+    {key: 'v', selector: document.querySelector('#v')},
+
+]
 const times = [];//tablica tablic obiektów, dla każdej ścieżki własna tablica a wniej obiekt 
 const addTrackButton = document.querySelector('#addTrack');
 const tracksContainer = document.querySelector('#tracks');
@@ -30,6 +45,7 @@ function addTrack() {
 
     tracksContainer.appendChild(newCheckbox);
 }
+
 
 //tablica checkboxów
 // const checkbox = [
@@ -153,11 +169,18 @@ function formatTime(ms) {
 
 
 
-addEventListener('keypress',(ev)=> {
+addEventListener('keypress', (ev) => {
     if (isRecording && currentTrackIndex >= 0) {
         const key = ev.key;
         const sound = sounds[key];
-        if (sound) {
+        // Poprawione wyszukiwanie w tablicy keys
+        const keyObject = keys.find(k => k.key === key);
+
+        if (sound && keyObject) {
+            keyObject.selector.classList.add('active');
+            // Po krótkim czasie usuwamy klasę 'active'
+            setTimeout(() => keyObject.selector.classList.remove('active'), 100); 
+
             times[currentTrackIndex].push({
                 key: key,
                 time: Date.now() - recordingStartTime,
@@ -166,5 +189,4 @@ addEventListener('keypress',(ev)=> {
             sound.play();
         }
     }
-})    
-
+});
