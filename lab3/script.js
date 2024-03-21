@@ -43,17 +43,28 @@ function addTrack() {
     newCheckbox.className = 'chip';
     newCheckbox.role = 'switch';
 
+    const looper = document.createElement('input');
+    looper.type = 'checkbox';
+    looper.id = `loop${id}`;
+    looper.value = `loop`;
+   
+
+    const looperLabel = document.createElement('label');
+    looperLabel.htmlFor = `loop${id}`;
+
+    //słuchamy czy wyłączone /włączone loopowanie dla tracka
+    looper.addEventListener('change', (e) => {
+        if (!e.target.checked) {
+            stopLooping(id); 
+        }
+    });
+
     tracksContainer.appendChild(newCheckbox);
+    tracksContainer.appendChild(looper);
+    tracksContainer.appendChild(looperLabel);
 }
 
 
-//tablica checkboxów
-// const checkbox = [
-//     document.querySelector('#track1'),
-//     document.querySelector('#track2'),
-//     document.querySelector('#track3'),
-//     document.querySelector('#track4')
-// ];
 
 
 const start = document.querySelector('#start');
@@ -75,7 +86,13 @@ tykacz.addEventListener('change',()=>{
     }
     })
         
-            
+let loopIntervals = {};
+function stopLooping(id) {
+    if (loopIntervals[id]) {
+        clearInterval(loopIntervals[id]);
+    }
+}
+    
 
 
 const play = document.querySelector('#play');
@@ -84,9 +101,9 @@ let startTime
 let endTime
 let isRecording=false
 let currentTrackIndex;
-let loopInterval; // Interwał dla loopowania
+let loopInterval; 
 let recordingStartTime;
-let maxTrackLength = 0; // Maksymalna
+let maxTrackLength = 0; 
 const playTrack = document.querySelector('#time')
 
 //odpalamy scieżke po checkboxie
@@ -109,32 +126,31 @@ const playTrack = document.querySelector('#time')
 //         }
 //     });
 // }
-function playTracks(loop = false) {
-    const trackLengths = times.map(track => track.reduce((acc, curr) => Math.max(acc, curr.time), 0));
-    maxTrackLength = Math.max(...trackLengths);
-
+function playTracks() {
     times.forEach((track, index) => {
-        const checkbox = document.getElementById(`track${index}`);
-        if (checkbox.checked) {
+        const trackCheckbox = document.getElementById(`track${index}`);
+        const loopCheckbox = document.getElementById(`loop${index}`);
+        if (trackCheckbox.checked) {
             track.forEach(note => {
                 setTimeout(() => {
                     const soundToPlay = sounds[note.key];
                     if (soundToPlay) {
                         soundToPlay.currentTime = 0;
                         soundToPlay.play();
+
+                        if (loopCheckbox.checked) {
+                            setInterval(() => {
+                                soundToPlay.currentTime = 0;
+                                soundToPlay.play();
+                            }, track.reduce((acc, curr) => Math.max(acc, curr.time), 0) + 1000); 
+                        }
                     }
                 }, note.time);
-
-                if (loop) {
-                    setInterval(() => {
-                        soundToPlay.currentTime = 0;
-                        soundToPlay.play();
-                    }, maxTrackLength);
-                }
             });
         }
     });
 }
+
 play.addEventListener('click', () => playTracks(tykacz.checked));
 
 let stoper;
@@ -173,12 +189,10 @@ addEventListener('keypress', (ev) => {
     if (isRecording && currentTrackIndex >= 0) {
         const key = ev.key;
         const sound = sounds[key];
-        // Poprawione wyszukiwanie w tablicy keys
         const keyObject = keys.find(k => k.key === key);
 
         if (sound && keyObject) {
             keyObject.selector.classList.add('active');
-            // Po krótkim czasie usuwamy klasę 'active'
             setTimeout(() => keyObject.selector.classList.remove('active'), 100); 
 
             times[currentTrackIndex].push({

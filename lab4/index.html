@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="noteForm">
+        <input type="text" placeholder="Tytuł" class="title" name="title" id="title">
+        <textarea name="desc" placeholder="Treść notatki" class="desc" id="desc" cols="30" rows="10"></textarea>
+        <input type="color" name="color" id="color">
+        <input type="checkbox" name="pin" id="pin">
+        <button id="create">Create</button>
+    </div>
+
+    <div class="pinned-notes"></div>
+
+    <div class="notes"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
