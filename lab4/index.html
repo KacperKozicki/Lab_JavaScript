@@ -10,9 +10,19 @@
     <div class="noteForm">
         <input type="text" placeholder="Tytuł" class="title" name="title" id="title">
         <textarea name="desc" placeholder="Treść notatki" class="desc" id="desc" cols="30" rows="10"></textarea>
-        <input type="color" name="color" id="color">
-        <input type="checkbox" name="pin" id="pin">
-        <button id="create">Create</button>
+        
+        <div class="flexCreate">
+            
+            <div>
+                <label for="color"><i class="fa-solid fa-brush"></i></label>
+                <input type="color" name="color" id="color">
+    
+                <label for="pin"><i class="fa-solid fa-thumbtack"></i></label>
+                <input type="checkbox" name="pin" id="pin">
+            </div>
+            <button id="create">Create</button>
+        </div>
+       
     </div>
 
     <div class="pinned-notes"></div>
@@ -20,5 +30,6 @@
     <div class="notes"></div>
 
     <script src="script.js"></script>
+    <script src="https://kit.fontawesome.com/995e38f850.js" crossorigin="anonymous"></script>
 </body>
 </html>
