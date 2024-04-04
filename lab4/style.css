@@ -151,3 +151,43 @@ body,html{
     font-size: 12px;
     color: #00000064;
 }
+
+.remindDiv{
+    background-color: #53535342;
+    padding: 6px 10px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+}
+.fa-bell{
+    margin-right: 5px;
+}
+#remind{
+    border-radius: 20px;
+    border: none;
+    padding: 4px 10px;
+
+}
+.remindTime{
+    border-radius: 20px;
+    border: none;
+    padding: 4px 10px;
+    background-color: transparent;
+}
+.remindDivs{
+    background-color: #ffffff7d;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin: auto;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    margin-right: 0px;
+}
