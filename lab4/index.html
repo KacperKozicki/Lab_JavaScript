@@ -10,7 +10,11 @@
     <div class="noteForm">
         <input type="text" placeholder="Tytuł" class="title" name="title" id="title">
         <textarea name="desc" placeholder="Treść notatki" class="desc" id="desc" cols="30" rows="10"></textarea>
-        
+        <div class="tags"></div>
+        <div class="tagDiv">
+            <input type="text" class="tag" name="tag" id="tag">
+            <button class="tagBtn" id="tagBtn">Dodaj tag<i class="fa-solid fa-tags"></i> </button>
+        </div>
         <div class="flexCreate">
             
             <div>
@@ -26,7 +30,7 @@
                 <input type="datetime-local" name="remind" id="remind">
 
             </div>
-            <button id="create">Create</button>
+            <button id="create">Utwórz</button>
         </div>
        
     </div>

@@ -10,9 +10,69 @@ const createNoteBtn = document.querySelector('#create');
 
 const notes = document.querySelector('.notes');
 const pinnedNotes = document.querySelector('.pinned-notes');
+const tagInput = document.querySelector('#tag');
+const tagBtn = document.querySelector('#tagBtn');
+const tags = document.querySelector('.tags');
+let tagArr = JSON.parse(localStorage.getItem('tags')) || [];
+let currentTagArr = [];
 
 
-function createNote (id,title, content, date,remind, color, pinned) {
+function createTagElement(tag) {
+    const tagElement = document.createElement('div');
+    tagElement.classList.add('tagElement');
+    tagElement.id = tag;
+
+    const tagContent = document.createElement('span'); 
+    tagContent.textContent = tag;
+
+    const delTag = document.createElement('div');
+    delTag.classList.add('delTag');
+    delTag.textContent = '\u00D7';
+
+    tagElement.appendChild(tagContent);
+    tagElement.appendChild(delTag);
+
+    delTag.addEventListener('click', (event) => {
+        event.stopPropagation(); 
+        let index = tagArr.indexOf(tag);
+        if (index !== -1) {
+            tagArr.splice(index, 1);
+            currentTagArr.splice(index, 1);
+            localStorage.setItem('tags', JSON.stringify(tagArr)); 
+            displayTags(); 
+        }
+    });
+
+    tagElement.addEventListener('click', () => {
+        const index = currentTagArr.indexOf(tag);
+        if (index === -1) {
+            currentTagArr.push(tag);
+            tagElement.classList.add('activeTag');
+        } else {
+            currentTagArr.splice(index, 1);
+            tagElement.classList.remove('activeTag');
+        }        
+        console.log(currentTagArr);
+    });
+    
+    
+    return tagElement;
+}
+tagBtn.addEventListener('click', () => {
+    if (tagInput.value !== '' && !tagArr.includes(tagInput.value)) { 
+        tagArr.push(tagInput.value); 
+        localStorage.setItem('tags', JSON.stringify(tagArr)); 
+        tags.appendChild(createTagElement(tagInput.value)); 
+        tagInput.value = '';
+    }
+});
+function displayTags() {
+    tags.innerHTML = '';
+    tagArr.forEach(tag => {
+        tags.appendChild(createTagElement(tag));
+    });
+}
+function createNote (id,title, content, date,remind, color, pinned, tags) {
     const remindDate = document.querySelector('#remind').value;
 
     return {
@@ -22,7 +82,8 @@ function createNote (id,title, content, date,remind, color, pinned) {
         date,
         remindDate,
         color,
-        pinned
+        pinned,
+        tags
     }
 }
 createNoteBtn.addEventListener('click', ()=> {
@@ -36,7 +97,7 @@ createNoteBtn.addEventListener('click', ()=> {
         remindDate,
         color.value,
         pinned.checked,
-        
+        [...currentTagArr]
         
     );
     console.log(note);
@@ -47,6 +108,7 @@ createNoteBtn.addEventListener('click', ()=> {
 addEventListener('DOMContentLoaded', () => {
     renderAllNotes();
     reminder();
+    displayTags();
 
 });
 function renderAllNotes() {
@@ -85,7 +147,14 @@ function addNoteToDOM(note) {
         reminder();
     });
     
-
+    const tagContainer = document.createElement('div');
+    tagContainer.classList.add('tagsNote');
+    note.tags.forEach(tag => {
+        const tagElement = document.createElement('span');
+        tagElement.classList.add('tagNote');
+        tagElement.textContent = tag;
+        tagContainer.appendChild(tagElement);
+    });
 
     deleteNote.innerHTML = '<i class="fa-regular fa-circle-xmark"></i>';
     deleteNote.classList.add('delete');
@@ -192,6 +261,7 @@ function addNoteToDOM(note) {
 
     remindDivs.appendChild(remind);
     newNote.appendChild(remindDivs);
+    newNote.appendChild(tagContainer);
 
 
     if (note.pinned) {
