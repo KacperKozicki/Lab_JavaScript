@@ -1,0 +1,9 @@
+.dane{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+#balls{
+    border: 1px solid black;
+}

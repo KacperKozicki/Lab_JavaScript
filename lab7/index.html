@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pogoda</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="weatherApp">
+        <div class="inputcity">
+            
+            <div class="sug">
+                <input type="text" id="cityInput" placeholder="Wpisz nazwę miasta" onkeyup="suggestCity()">
+                <div id="suggestions" class="autocomplete-items"></div>
+            </div>
+            <button class="btn" onclick="addCity()">Dodaj miasto</button>
+        </div>
+        
+        <div id="citiesContainer"></div>
+        <canvas id="weatherChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
