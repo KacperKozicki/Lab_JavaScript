@@ -26,7 +26,7 @@ const keys = [
     {key: 'v', selector: document.querySelector('#v')},
 
 ]
-const times = [];//tablica tablic obiektów, dla każdej ścieżki własna tablica a wniej obiekt 
+const times = [];//tablica tablic obiektów dla każdej ścieżki - własna tablica a wniej obiekt 
 const addTrackButton = document.querySelector('#addTrack');
 const tracksContainer = document.querySelector('#tracks');
 

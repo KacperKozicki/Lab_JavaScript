@@ -14,13 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function suggestCity() {
     let input = document.getElementById('cityInput').value;
-    if (input.length < 3) return; // Minimalna długość wprowadzonego tekstu, żeby zacząć sugerować
+    if (input.length < 3) return; // min długość wprowadzonego tekstu
     fetch(`${cityURL}?name=${input}`, {headers: {'X-Api-Key': 'hfEfgczqEaj6umMvaWGHPg==xeqfyHYrpWkE5y9v'}})
         .then(response => response.json())
         .then(data => {
             let suggestions = document.getElementById('suggestions');
             suggestions.innerHTML = '';
-            if (Array.isArray(data)) { // Sprawdzenie czy odpowiedź jest tablicą
+            if (Array.isArray(data)) { // sprawdzenie czy odpowiedź jest tablicą
                 data.forEach(city => {
                     let div = document.createElement('div');
                     div.textContent = city.name;
@@ -30,34 +30,32 @@ function suggestCity() {
                     };
                     suggestions.appendChild(div);
                 });
-            } else {
-                console.log('Otrzymano nieoczekiwany format danych:', data);
-            }
+            } 
         })
         .catch(error => console.error('Błąd podczas próby pobrania danych miasta:', error));
 }
 
+document.querySelector('.btn').addEventListener('click', addCity);
 
 function addCity() {
     let cityName = document.getElementById('cityInput').value;
     if (!cities.includes(cityName) && cities.length < 10) {
         cities.push(cityName);
         localStorage.setItem('cities', JSON.stringify(cities));
-        addCityElement(cityName);
         updateWeather();
     }
 }
 
-function addCityElement(cityName) {
-    const existingCityDiv = document.querySelector(`.city[data-city-name="${cityName}"]`);
+
+function addCityElement(cityName, container) {
+    const existingCityDiv = document.querySelector(`.city-weather[data-city-name="${cityName}"]`);
     if (!existingCityDiv) {
         let div = document.createElement('div');
         div.className = 'city';
         div.setAttribute('data-city-name', cityName);
-        div.textContent = cityName;
 
         let removeBtn = document.createElement('button');
-        removeBtn.textContent = 'Usuń';
+        removeBtn.textContent = "X";
         removeBtn.onclick = function() {
             cities = cities.filter(city => city !== cityName);
             localStorage.setItem('cities', JSON.stringify(cities));
@@ -65,62 +63,22 @@ function addCityElement(cityName) {
             updateWeather();
         };
         div.appendChild(removeBtn);
-        document.getElementById('citiesContainer').appendChild(div);
-    } else {
-        console.log("Miasto już jest wyświetlane na liście.");
-    }
+        container.appendChild(div);
+    } 
 }
 
 
-function getWeather() {
-    cities.forEach(city => {
-        fetch(`${weatherURL}?q=${city}&APPID=${APPID}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Tutaj możesz wyświetlić dane o pogodzie w odpowiednim miejscu na stronie
-            });
-    });
-    if (selectedCity) {
-        fetch(`${forecastURL}?q=${selectedCity}&APPID=${APPID}`)
-            .then(response => response.json())
-            .then(data => {
-                // Rysowanie wykresu pogody godzinowej
-                let ctx = document.getElementById('weatherChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.list.map(item => new Date(item.dt_txt).getHours() + 'h'),
-                        datasets: [{
-                            label: 'Temperatura (°C)',
-                            data: data.list.map(item => item.main.temp - 273.15),
-                            borderColor: 'blue',
-                            backgroundColor: 'lightblue',
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: false
-                                }
-                            }]
-                        }
-                    }
-                });
-            });
-    }
-}
+
 function updateWeather() {
     const container = document.getElementById('citiesContainer');
-    container.innerHTML = ''; // Wyczyszczenie kontenera przed dodaniem aktualizacji
+    container.innerHTML = '';
     cities.forEach(city => {
         fetch(`${weatherURL}?q=${city}&APPID=${APPID}&units=metric`)
             .then(response => response.json())
             .then(data => {
                 displayWeather(data, city);
             })
-            .catch(error => console.error('Błąd podczas pobierania danych pogodowych:', error));
+            .catch(error => console.error('Błąd podczas pobierania danych:', error));
     });
 }
 
@@ -128,15 +86,14 @@ function displayWeather(data, city) {
     const container = document.getElementById('citiesContainer');
     const cityDiv = document.createElement('div');
     cityDiv.className = 'city-weather';
-    cityDiv.setAttribute('data-city-name', city); // Dodanie atrybutu identyfikującego
+    cityDiv.setAttribute('data-city-name', city);
     cityDiv.innerHTML = `
-        <h2>${city}</h2>
+        <h2 class='miasto'>${city} <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}.png" alt="${data.weather[0].description}"> </h2>
         <p>Temperatura: ${data.main.temp} °C (odczuwalna: ${data.main.feels_like} °C)</p>
         <p>Wilgotność: ${data.main.humidity}%</p>
         <p>Ciśnienie: ${data.main.pressure} hPa</p>
         <p>Wiatr: ${data.wind.speed} m/s, kierunek: ${data.wind.deg}°</p>
-        <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}.png" alt="${data.weather[0].description}">
-        <p>${data.weather[0].description}</p>
-        `;
+    `;
+    addCityElement(city, cityDiv); 
     container.appendChild(cityDiv);
 }

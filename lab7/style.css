@@ -8,7 +8,6 @@
     list-style: none;
     padding: 0;
     background: #f9f9f9;
-    border: 1px solid #d4d4d4;
     z-index: 99;
 }
 
@@ -22,9 +21,11 @@
     background-color: #e9e9e9;
 }
 
-.city {
+.city button {
     margin-top: 20px;
-    border-bottom: 1px solid #ccc;
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
 }
 
 .city button {
@@ -38,16 +39,24 @@
     margin-bottom: 20px;
     margin-top: 20px;
 }
-
+.miasto{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+}
 #cityInput{
     width: 100%;
     border: 3px solid #8a8aff;
     border-radius: 10px;
-    height: 30px;
+    height: 100%;
     margin-bottom: 10px;
 }
 .inputcity{
     display: flex;
+    justify-content: space-evenly;
 }
 .sug{
     width: 65%;

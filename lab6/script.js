@@ -1,7 +1,7 @@
-let ball;  // Declare 'ball' globally
-let box;   // Declare 'box' globally if not already defined
+let ball;  
+let box;
 let x = 0, y = 0;
-let vx = 2, vy = 2;
+let vx = 20, vy = 2;
 const g = 0.01;
 let touchingEdge = false;
 
@@ -20,7 +20,7 @@ function createBall() {
 
 function createHole() {
   const hole = document.createElement('div');
-  hole.className = 'hole';  // Add class name for selection
+  hole.className = 'hole';  
   hole.style.width = '40px';
   hole.style.height = '40px';
   hole.style.backgroundColor = 'black';
@@ -32,8 +32,7 @@ function createHole() {
   return hole;
 }
 
-// Initialization
-box = document.querySelector('#box'); // Ensure this selects the correct element
+box = document.querySelector('#box'); 
 createHole();
 createBall();
 
@@ -75,26 +74,26 @@ function animate() {
 
 window.addEventListener('deviceorientation', (event) => {
   const { beta, gamma } = event;
-  vx += gamma * 0.05;
-  vy += beta * 0.05;
-  vx = Math.max(Math.min(vx, 10), -10);
-  vy = Math.max(Math.min(vy, 10), -10);
+  vx += gamma * 0.05; //prędkość w poziomie
+  vy += beta * 0.05; //prędkość w pionie
+  vx = Math.max(Math.min(vx, 10), -10); //ograniczenie prędkości
+  vy = Math.max(Math.min(vy, 10), -10); 
 });
 let score =0;
+
 function checkCollision() {
 
   const ballRect = ball.getBoundingClientRect();
-  const holes = Array.from(document.querySelectorAll('.hole'));
+  const holes = Array.from(document.querySelectorAll('.hole')); // pobranie wszystkich dziur
 
   for (const hole of holes) {
-    const holeRect = hole.getBoundingClientRect();
+    const holeRect = hole.getBoundingClientRect(); /
 
-    // Check if the center of the ball is within the hole
-    const ballCenterX = ballRect.left + ballRect.width / 2;
+    const ballCenterX = ballRect.left + ballRect.width / 2; // środek kulki
     const ballCenterY = ballRect.top + ballRect.height / 2;
 
     if (
-      ballCenterX > holeRect.left &&
+      ballCenterX > holeRect.left && // sprawdzenie czy środek kulki jest w dziurze
       ballCenterX < holeRect.right &&
       ballCenterY > holeRect.top &&
       ballCenterY < holeRect.bottom

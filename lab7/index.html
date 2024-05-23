@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pogoda</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/995e38f850.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div id="weatherApp">
@@ -14,11 +15,11 @@
                 <input type="text" id="cityInput" placeholder="Wpisz nazwę miasta" onkeyup="suggestCity()">
                 <div id="suggestions" class="autocomplete-items"></div>
             </div>
-            <button class="btn" onclick="addCity()">Dodaj miasto</button>
+
+            <button class="btn" >Dodaj miasto</button>
         </div>
         
         <div id="citiesContainer"></div>
-        <canvas id="weatherChart"></canvas>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
