@@ -13,21 +13,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function suggestCity() {
-    let input = document.getElementById('cityInput').value;
+    let input = document.querySelector('#cityInput').value;
     if (input.length < 3) return; // min długość wprowadzonego tekstu
     fetch(`${cityURL}?name=${input}`, {headers: {'X-Api-Key': 'hfEfgczqEaj6umMvaWGHPg==xeqfyHYrpWkE5y9v'}})
         .then(response => response.json())
         .then(data => {
-            let suggestions = document.getElementById('suggestions');
+            let suggestions = document.querySelector('#suggestions');
             suggestions.innerHTML = '';
             if (Array.isArray(data)) { // sprawdzenie czy odpowiedź jest tablicą
                 data.forEach(city => {
                     let div = document.createElement('div');
                     div.textContent = city.name;
-                    div.onclick = function() {
-                        document.getElementById('cityInput').value = city.name;
+                    div.addEventListener('click', () => {
+                        document.querySelector('#cityInput').value = city.name;
                         suggestions.innerHTML = '';
-                    };
+                    });                    
                     suggestions.appendChild(div);
                 });
             } 
@@ -38,7 +38,7 @@ function suggestCity() {
 document.querySelector('.btn').addEventListener('click', addCity);
 
 function addCity() {
-    let cityName = document.getElementById('cityInput').value;
+    let cityName = document.querySelector('#cityInput').value;
     if (!cities.includes(cityName) && cities.length < 10) {
         cities.push(cityName);
         localStorage.setItem('cities', JSON.stringify(cities));
@@ -70,7 +70,7 @@ function addCityElement(cityName, container) {
 
 
 function updateWeather() {
-    const container = document.getElementById('citiesContainer');
+    const container = document.querySelector('#citiesContainer');
     container.innerHTML = '';
     cities.forEach(city => {
         fetch(`${weatherURL}?q=${city}&APPID=${APPID}&units=metric`)
@@ -83,7 +83,7 @@ function updateWeather() {
 }
 
 function displayWeather(data, city) {
-    const container = document.getElementById('citiesContainer');
+    const container = document.querySelector('#citiesContainer');
     const cityDiv = document.createElement('div');
     cityDiv.className = 'city-weather';
     cityDiv.setAttribute('data-city-name', city);

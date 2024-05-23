@@ -7,11 +7,7 @@ let touchingEdge = false;
 
 function createBall() {
   ball = document.createElement('div');
-  ball.style.width = '20px';
-  ball.style.height = '20px';
-  ball.style.backgroundColor = 'red';
-  ball.style.borderRadius = '50%';
-  ball.style.position = 'absolute';
+  ball.className = 'ball';
   ball.style.top = Math.random() * (box.offsetHeight - 20) + 'px';
   ball.style.left = Math.random() * (box.offsetWidth - 20) + 'px';
   box.appendChild(ball);
@@ -21,11 +17,6 @@ function createBall() {
 function createHole() {
   const hole = document.createElement('div');
   hole.className = 'hole';  
-  hole.style.width = '40px';
-  hole.style.height = '40px';
-  hole.style.backgroundColor = 'black';
-  hole.style.borderRadius = '50%';
-  hole.style.position = 'absolute';
   hole.style.top = Math.random() * (box.offsetHeight - 40) + 'px';
   hole.style.left = Math.random() * (box.offsetWidth - 40) + 'px';
   box.appendChild(hole);
@@ -87,7 +78,7 @@ function checkCollision() {
   const holes = Array.from(document.querySelectorAll('.hole')); // pobranie wszystkich dziur
 
   for (const hole of holes) {
-    const holeRect = hole.getBoundingClientRect(); /
+    const holeRect = hole.getBoundingClientRect(); 
 
     const ballCenterX = ballRect.left + ballRect.width / 2; // środek kulki
     const ballCenterY = ballRect.top + ballRect.height / 2;

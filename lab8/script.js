@@ -81,9 +81,9 @@ inputCount.addEventListener('input', () => {
         const distance1 = parseInt(inputRange.value);
         for (let i = 0; i < balls.length; i++) {
             for (let j = i + 1; j < balls.length; j++) {
-                const distance = Math.sqrt(Math.pow(balls[i].x - balls[j].x, 2) + Math.pow(balls[i].y - balls[j].y, 2));
+                const distance = Math.sqrt(Math.pow(balls[i].x - balls[j].x, 2) + Math.pow(balls[i].y - balls[j].y, 2)); // odległość między kulami
                 if (distance <= distance1) {
-                    const line = new Line(balls[i].x, balls[i].y, balls[j].x, balls[j].y, 2, '#f43bff');
+                    const line = new Line(balls[i].x, balls[i].y, balls[j].x, balls[j].y, 2, '#f43bff'); // stwórz nową linię
                     line.rysuj();
                 }
             }
